@@ -15,6 +15,7 @@ public final class AgeMonths {
 
   /** The oldest age this shelter will record: 40 years. */
   public static final int MAX_MONTHS = 480;
+  private static final int MONTHS_PER_YEAR = 12;
 
   private final int months;
 
@@ -68,7 +69,8 @@ public final class AgeMonths {
    * @return the number of complete years, never negative
    */
   public int years() {
-    throw new UnsupportedOperationException("TODO: implement years()");
+    int years = months / MONTHS_PER_YEAR;
+    return years;
   }
 
   /**
@@ -79,7 +81,8 @@ public final class AgeMonths {
    * @return a value in the range 0 to 11 inclusive
    */
   public int remainderMonths() {
-    throw new UnsupportedOperationException("TODO: implement remainderMonths()");
+    int remainderMonths = this.months % MONTHS_PER_YEAR;
+    return remainderMonths;
   }
 
   /**
@@ -88,7 +91,7 @@ public final class AgeMonths {
    * @return {@code true} if this age is less than twelve months
    */
   public boolean isUnderOneYear() {
-    throw new UnsupportedOperationException("TODO: implement isUnderOneYear()");
+    return this.months < MONTHS_PER_YEAR;
   }
 
   /**
@@ -114,6 +117,38 @@ public final class AgeMonths {
    */
   @Override
   public String toString() {
-    throw new UnsupportedOperationException("TODO: implement toString()");
+    int years = years();
+    int remainderMonths = remainderMonths();
+    String message = "";
+
+    if (years != 0) {
+      message += formatUnit(years, "year");
+
+      if (remainderMonths == 0) {
+        return message;
+      }
+      message += ", ";
+    }
+    message += formatUnit(remainderMonths, "month");
+
+    return message;
+  }
+  
+  /**
+   * Returns a string of the form {@code "N unit"} or {@code "N units"}, depending on whether {@code
+   * N} is 1 or not.
+   *
+   * @param value the number of units
+   * @param unit the singular form of the unit name
+   * @return a string of the form {@code "N unit"} or {@code "N units"}
+   */
+  private String formatUnit(int value, String unit) {
+    String message = value + " " + unit;
+    if (value != 1) {
+      message += "s";
+    }
+
+    return message;
   }
 }
+
